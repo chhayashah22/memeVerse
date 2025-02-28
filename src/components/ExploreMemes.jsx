@@ -9,7 +9,7 @@ export const ExploreMemes = () => {
   const [filteredMemes, setFilteredMemes] = useState([]);
   const [category, setCategory] = useState("Trending");
   const [searchQuery, setSearchQuery] = useState("");
-  const navigate=useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchMemes();
@@ -69,6 +69,7 @@ export const ExploreMemes = () => {
       const updatedMemes = prevMemes.map((meme) =>
         meme.id === id ? { ...meme, likes: meme.likes + 1 } : meme
       );
+      setFilteredMemes(updatedMemes);
       updateLocalStorage(updatedMemes);
       return updatedMemes;
     });
@@ -85,7 +86,9 @@ export const ExploreMemes = () => {
   return (
     <div className="bg-zinc-900 text-white p-8">
       <Title text1={"Explore"} text2={"Memes"} />
-      <input type="text"  placeholder="Search memes..."
+      <input
+        type="text"
+        placeholder="Search memes..."
         value={searchQuery}
         onChange={handleSearchChange}
         className="w-full p-2 mb-4 border rounded text-black"
@@ -115,7 +118,13 @@ export const ExploreMemes = () => {
               <img src={meme.url} alt={meme.name} className="w-full h-48 object-cover" />
               <p className="p-2 text-center bg-black bg-opacity-60 text-white">{meme.name}</p>
               <div className="flex justify-center items-center mt-2">
-                <button onClick={() => handleLike(meme.id)} className="text-red-500 text-2xl">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleLike(meme.id);
+                  }}
+                  className="text-red-500 text-2xl"
+                >
                   ❤️ {meme.likes}
                 </button>
               </div>
